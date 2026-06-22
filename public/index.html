@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Routine with Green & Maroon</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="gradient-bg" aria-hidden="true"></div>
+  <div class="orb orb-rose" aria-hidden="true"></div>
+  <div class="orb orb-pink" aria-hidden="true"></div>
+  <div class="orb orb-green" aria-hidden="true"></div>
+  <div class="floating-hearts" aria-hidden="true">
+    <span>♡</span><span>✦</span><span>💗</span><span>♡</span><span>✨</span><span>♡</span>
+  </div>
+
+  <button class="sound-toggle" id="soundToggle" type="button" aria-label="Sound effects on/off">🔊</button>
+
+  <main class="app">
+    <section class="intro-screen" id="introScreen">
+
+     
+      <h1>Daily Routine</h1>
+   
+
+      <article class="love-note intro-note" data-note-card="intro">
+        <span class="note-mark">♡</span>
+        <p class="note-text" data-note-slot="intro">Loading sweet note...</p>
+        <button class="small-icon-btn edit-note-btn" data-edit-note="intro" type="button" title="Edit note">✎</button>
+      </article>
+
+      <button class="main-btn mega-btn" id="openPlannerBtn" type="button">
+        Daily Routine with Green &amp; Maroon 
+      </button>
+     
+    </section>
+
+    <section class="planner hidden" id="planner">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">with green & maroon</p>
+          <h2>Our Little Week</h2>
+          <p class="status-line" id="syncStatus">Mengecek koneksi...</p>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-btn" id="miniPlayerBtn" type="button">♪ musik</button>
+          <button class="ghost-btn" id="backIntroBtn" type="button">♡ awal</button>
+        </div>
+      </header>
+
+      <nav class="nav-tabs" aria-label="Main navigation">
+        <button class="tab-btn active" data-page="calendarPage" type="button">Calendar</button>
+        <button class="tab-btn" data-page="musicPage" type="button">Music Settings</button>
+        <button class="tab-btn" data-page="notesPage" type="button">Love Notes</button>
+      </nav>
+
+      <section class="mini-player hidden" id="miniPlayer">
+        <div>
+          <p class="eyebrow">background music</p>
+          <strong id="activeTrackName">Belum ada lagu dipilih</strong>
+        </div>
+        <div class="mini-player-actions">
+          <button class="small-btn" id="playActiveBtn" type="button">Play</button>
+          <button class="small-btn" id="stopMusicBtn" type="button">Stop</button>
+        </div>
+      </section>
+
+      <section class="page active-page" id="calendarPage">
+        <article class="love-note page-note" data-note-card="calendar">
+          <span class="note-mark">💌</span>
+          <p class="note-text" data-note-slot="calendar">Loading sweet note...</p>
+          <button class="small-icon-btn edit-note-btn" data-edit-note="calendar" type="button" title="Edit note">✎</button>
+        </article>
+
+        <section class="calendar-layout">
+          <section class="calendar-card">
+            <div class="calendar-head">
+              <button class="round-btn" id="prevMonthBtn" type="button" aria-label="Bulan sebelumnya">‹</button>
+              <div>
+                <h3 id="monthTitle">Bulan</h3>
+                <p id="todayLabel">Hari ini</p>
+              </div>
+              <button class="round-btn" id="nextMonthBtn" type="button" aria-label="Bulan berikutnya">›</button>
+            </div>
+
+            <div class="weekday-row">
+              <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </section>
+
+          <aside class="day-card">
+            <article class="love-note compact-note" data-note-card="day">
+              <span class="note-mark">🌷</span>
+              <p class="note-text" data-note-slot="day">Loading sweet note...</p>
+              <button class="small-icon-btn edit-note-btn" data-edit-note="day" type="button" title="Edit note">✎</button>
+            </article>
+
+            <div class="day-head">
+              <div>
+                <p class="eyebrow">selected date</p>
+                <h3 id="selectedDateTitle">Pilih tanggal</h3>
+                <p id="scheduleSource" class="muted-text">Klik tanggal buat lihat jadwalnya.</p>
+              </div>
+              <span class="date-badge" id="weekdayBadge">♡</span>
+            </div>
+
+            <div class="timeline" id="timeline"></div>
+
+            <div class="schedule-toolbar">
+              <button class="main-btn add-schedule-btn" id="addEventBtn" type="button">+ Tambah jadwal</button>
+            </div>
+
+          </aside>
+        </section>
+      </section>
+
+      <section class="page" id="musicPage">
+        <article class="love-note page-note" data-note-card="music">
+          <span class="note-mark">🎧</span>
+          <p class="note-text" data-note-slot="music">Loading sweet note...</p>
+          <button class="small-icon-btn edit-note-btn" data-edit-note="music" type="button" title="Edit note">✎</button>
+        </article>
+
+        <section class="settings-grid single-settings">
+          <article class="settings-card music-upload-card">
+            <p class="eyebrow">local music source</p>
+            <h3>Background music dari file local</h3>
+            <p class="muted-text">
+              Default-nya sudah ada lagu romantic bawaan. Kalau mau ganti, upload MP3/WAV/M4A dari laptop kamu di sini, lalu pilih sebagai background music.
+            </p>
+            <form id="uploadForm" class="stack-form">
+              <label>
+                Nama lagu
+                <input type="text" id="uploadTitle" placeholder="Contoh: lagu favorit kita" />
+              </label>
+              <label>
+                File audio local
+                <input type="file" id="audioFile" accept="audio/*" required />
+              </label>
+              <button class="main-btn" type="submit">Upload & simpan lagu</button>
+            </form>
+            <p class="muted-text">File akan tersimpan di folder <strong>public/uploads</strong>, sementara pilihan aktifnya masuk.</p>
+          </article>
+        </section>
+
+        <section class="playlist-card">
+          <div class="section-title-row">
+            <div>
+              <p class="eyebrow">playlist settings</p>
+              <h3>Pilih background music</h3>
+            </div>
+            <button class="ghost-btn" id="refreshMusicBtn" type="button">Refresh</button>
+          </div>
+          <div class="playlist" id="playlist"></div>
+        </section>
+      </section>
+
+      <section class="page" id="notesPage">
+        <article class="love-note page-note" data-note-card="notes">
+          <span class="note-mark">💗</span>
+          <p class="note-text" data-note-slot="notes">Loading sweet note...</p>
+          <button class="small-icon-btn edit-note-btn" data-edit-note="notes" type="button" title="Edit note">✎</button>
+        </article>
+
+        <section class="notes-manager">
+          <div class="section-title-row">
+            <div>
+              <p class="eyebrow">dynamic validation notes</p>
+              <h3>Notes kecil buat dia</h3>
+            </div>
+            <button class="ghost-btn" id="reloadNotesBtn" type="button">Reload notes</button>
+          </div>
+          <p class="muted-text">
+            Ubah text validasi di sini. Nanti muncul di tiap halaman dan tersimpan.
+          </p>
+          <div class="notes-list" id="notesList"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <div class="toast hidden" id="toast">Saved 💗</div>
+
+
+  <div class="event-modal hidden" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+    <div class="modal-card event-modal-card">
+      <button class="modal-close" id="closeEventModal" type="button" aria-label="Tutup">×</button>
+      <p class="eyebrow">schedule editor</p>
+      <h3 id="eventModalTitle">Tambah jadwal</h3>
+      <form class="event-form modal-event-form" id="eventForm">
+        <input type="hidden" id="editingIndex" value="" />
+        <label>
+          Jam
+          <input type="time" id="eventTime" required />
+        </label>
+        <label>
+          Judul jadwal
+          <input type="text" id="eventTitle" placeholder="Contoh: dinner bareng" required maxlength="160" />
+        </label>
+        <label>
+          Catatan kecil
+          <textarea id="eventNote" rows="3" placeholder="Contoh: jangan lupa bilang dia cantik hari ini"></textarea>
+        </label>
+        <label>
+          Tipe
+          <select id="eventCategory">
+            <option value="love">Love</option>
+            <option value="work">Work</option>
+            <option value="date">Date</option>
+            <option value="home">Home</option>
+            <option value="fun">Fun</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button class="main-btn" type="submit">Simpan item</button>
+          <button class="ghost-btn" type="button" id="clearFormBtn">Batal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="note-modal hidden" id="noteModal" role="dialog" aria-modal="true" aria-labelledby="noteModalTitle">
+    <div class="modal-card">
+      <button class="modal-close" id="closeNoteModal" type="button" aria-label="Tutup">×</button>
+      <p class="eyebrow">edit sweet note</p>
+      <h3 id="noteModalTitle">Ubah note</h3>
+      <textarea id="noteModalText" rows="6"></textarea>
+      <div class="form-actions">
+        <button class="main-btn" id="saveNoteModalBtn" type="button">Simpan note</button>
+        <button class="ghost-btn" id="cancelNoteModalBtn" type="button">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audioPlayer" loop preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
