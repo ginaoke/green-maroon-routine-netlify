@@ -1088,8 +1088,8 @@ function buildScheduleExportMarkup() {
   const date = parseDateKey(selectedDate);
   const shortDay = weekdayNames[date.getDay()].slice(0, 3);
   const sourceText = selectedSource === 'custom'
-    ? 'Jadwal ini sudah custom khusus tanggal ini.'
-    : 'Ini jadwal default yang sedang aktif.';
+    ? 'Customized.'
+    : 'Default.';
 
   const eventsMarkup = selectedEvents.length
     ? selectedEvents.map((event) => `
