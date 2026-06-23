@@ -418,7 +418,7 @@ function renderCalendar() {
 function renderTimeline() {
   const date = parseDateKey(selectedDate);
   selectedDateTitle.textContent = `${weekdayNames[date.getDay()]}, ${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-  weekdayBadge.textContent = weekdayNames[date.getDay()].slice(0, 3);
+
   scheduleSource.textContent = selectedSource === 'custom'
     ? 'Customized.'
     : 'Default.';
