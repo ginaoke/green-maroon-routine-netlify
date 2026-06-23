@@ -21,7 +21,7 @@ const calendarGrid = $('#calendarGrid');
 const prevMonthBtn = $('#prevMonthBtn');
 const nextMonthBtn = $('#nextMonthBtn');
 const selectedDateTitle = $('#selectedDateTitle');
-const weekdayBadge = $('#weekdayBadge');
+const printScheduleBtn = $('#printScheduleBtn');
 const scheduleSource = $('#scheduleSource');
 const timeline = $('#timeline');
 const eventForm = $('#eventForm');
@@ -420,8 +420,8 @@ function renderTimeline() {
   selectedDateTitle.textContent = `${weekdayNames[date.getDay()]}, ${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
   weekdayBadge.textContent = weekdayNames[date.getDay()].slice(0, 3);
   scheduleSource.textContent = selectedSource === 'custom'
-    ? 'Jadwal ini sudah custom khusus tanggal ini.'
-    : 'Ini jadwal default. Edit lalu simpan kalau mau custom.';
+    ? 'Customized.'
+    : 'Default.';
 
   timeline.innerHTML = '';
 
@@ -972,6 +972,8 @@ function switchPage(pageId) {
 }
 
 function wireEvents() {
+  if (printScheduleBtn) printScheduleBtn.addEventListener('click', exportScheduleAsImage);
+
   document.addEventListener('click', (event) => {
     const button = event.target.closest('button');
     if (!button || button.id === 'soundToggle') return;
@@ -1073,6 +1075,96 @@ async function init() {
   await loadNotes();
   await loadMusic();
   await loadSchedule(selectedDate);
+}
+
+function safeFileName(text = '') {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'jadwal';
+}
+
+function buildScheduleExportMarkup() {
+  const date = parseDateKey(selectedDate);
+  const shortDay = weekdayNames[date.getDay()].slice(0, 3);
+  const sourceText = selectedSource === 'custom'
+    ? 'Jadwal ini sudah custom khusus tanggal ini.'
+    : 'Ini jadwal default yang sedang aktif.';
+
+  const eventsMarkup = selectedEvents.length
+    ? selectedEvents.map((event) => `
+        <article class="schedule-export-event">
+          <div class="schedule-export-time">${escapeHtml(event.time || '--:--')}</div>
+          <div class="schedule-export-copy">
+            <p class="schedule-export-title">${escapeHtml(event.title || 'Untitled event')}</p>
+            <p class="schedule-export-note">${escapeHtml(event.note || 'No note, tapi tetap sweet.')}</p>
+            <span class="schedule-export-pill">${escapeHtml((event.category || 'love').toLowerCase())}</span>
+          </div>
+        </article>
+      `).join('')
+    : '<div class="schedule-export-empty">Belum ada jadwal untuk tanggal ini.</div>';
+
+  return `
+    <div class="schedule-export-surface">
+      <div class="schedule-export-head">
+        <div>
+          <h2 class="schedule-export-date">${escapeHtml(selectedDateTitle.textContent)}</h2>
+          <p class="schedule-export-subtitle">${escapeHtml(sourceText)}</p>
+        </div>
+        <div class="schedule-export-badge">${escapeHtml(shortDay)}</div>
+      </div>
+      <div class="schedule-export-list">${eventsMarkup}</div>
+    </div>
+  `;
+}
+
+async function exportScheduleAsImage() {
+  if (!selectedDate) {
+    showToast('Pilih tanggal dulu ya 💗');
+    return;
+  }
+
+  if (typeof html2canvas === 'undefined') {
+    showToast('Fitur export belum siap. Coba refresh dulu ya.');
+    return;
+  }
+
+  clickSound();
+  if (printScheduleBtn) {
+    printScheduleBtn.disabled = true;
+    printScheduleBtn.classList.add('loading');
+  }
+
+  const exportRoot = document.createElement('div');
+  exportRoot.className = 'schedule-export-root';
+  exportRoot.innerHTML = buildScheduleExportMarkup();
+  document.body.appendChild(exportRoot);
+
+  try {
+    if (document.fonts?.ready) await document.fonts.ready;
+
+    const canvas = await html2canvas(exportRoot.firstElementChild, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: null
+    });
+
+    const link = document.createElement('a');
+    link.href = canvas.toDataURL('image/png');
+    link.download = `${safeFileName(selectedDateTitle.textContent)}.png`;
+    link.click();
+
+    showToast('Jadwal berhasil disimpan jadi gambar 💖');
+  } catch (error) {
+    console.error(error);
+    showToast('Gagal menyimpan gambar 😢');
+  } finally {
+    exportRoot.remove();
+    if (printScheduleBtn) {
+      printScheduleBtn.disabled = false;
+      printScheduleBtn.classList.remove('loading');
+    }
+  }
 }
 
 init();

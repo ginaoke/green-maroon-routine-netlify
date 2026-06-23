@@ -103,7 +103,10 @@
                 <h3 id="selectedDateTitle">Pilih tanggal</h3>
                 <p id="scheduleSource" class="muted-text">Klik tanggal buat lihat jadwalnya.</p>
               </div>
-              <span class="date-badge" id="weekdayBadge">♡</span>
+             <button class="print-badge-btn" id="printScheduleBtn" type="button" title="Simpan jadwal sebagai gambar">
+                <span class="print-badge-icon" aria-hidden="true">🖨</span>
+                <span>Print</span>
+              </button>
             </div>
 
             <div class="timeline" id="timeline"></div>
@@ -235,7 +238,7 @@
   </div>
 
   <audio id="audioPlayer" loop preload="auto"></audio>
-
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
